@@ -370,16 +370,32 @@ class TelegramSender:
         将标准 Markdown 转换为 Telegram 支持的格式
 
         Telegram Markdown 限制：
-        - 不支持 # 标题
+        - 不支持 # 标题，转为 *粗體* 顯示
+        - 不支持表格 \| col1 \| col2 \|，转为「標籤: 值」清單
         - 使用 *bold* 而非 **bold**
         - 使用 _italic_
         """
         result = strip_hidden_markdown_metadata(text)
 
-        # 移除 # 标题标记（Telegram 不支持）
-        result = re.sub(r'^#{1,6}\s+', '', result, flags=re.MULTILINE)
+        # 先處理表格：將 | key | value | 轉為 「key: value」清單行
+        def _table_row_to_list(match):
+            cells = [c.strip() for c in match.group(0).strip("|").split("|")]
+            cells = [c for c in cells if c]  # 移除空單元格
+            if len(cells) >= 2:
+                return f"• {cells[0]}: {cells[1]}"
+            if len(cells) == 1:
+                return f"• {cells[0]}"
+            return ""
 
-        # 转换 **bold** 为 *bold*
+        result = re.sub(r'^\s*\|.*\|\s*$', _table_row_to_list, result, flags=re.MULTILINE)
+
+        # 移除表格分隔線行 |---|---|
+        result = re.sub(r'^\s*\|[\s\-:|]+\|\s*$', '', result, flags=re.MULTILINE)
+
+        # 移除 # 標題標記並轉為 *粗體*（Telegram 不支持 #，但保留文字內容）
+        result = re.sub(r'^#{1,6}\s+(.+)$', r'*\1*', result, flags=re.MULTILINE)
+
+        # 轉換 **bold** 為 *bold*
         result = re.sub(r'\*\*(.+?)\*\*', r'*\1*', result)
 
         # Escape special characters for Telegram Markdown, but preserve link syntax [text](url)
