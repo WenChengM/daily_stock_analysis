@@ -39,6 +39,13 @@ KO_NO_CHANNEL_DISCLOSURE = (
     "⚠️ 뉴스 검색 채널이 설정되지 않아 이번 분석에는 "
     "뉴스 근거를 반영하지 않았습니다."
 )
+ZH_HANT_ZERO_HIT_DISCLOSURE = (
+    "⚠️ 本次未獲取到可用的新聞面數據，以下結論未納入新聞維度證據。\n"
+)
+ZH_HANT_NO_CHANNEL_DISCLOSURE = (
+    "⚠️ 未配置搜索渠道，本次分析未納入新聞面證據。\n"
+)
+
 
 
 def _make_result(
@@ -312,6 +319,7 @@ class SupportedLanguageDisclosureTestCase(unittest.TestCase):
 
     EXPECTED = {
         "zh": (NO_CHANNEL_DISCLOSURE, ZERO_HIT_DISCLOSURE),
+        "zh_hant": (ZH_HANT_NO_CHANNEL_DISCLOSURE, ZH_HANT_ZERO_HIT_DISCLOSURE),
         "en": (EN_NO_CHANNEL_DISCLOSURE, EN_ZERO_HIT_DISCLOSURE),
         "ko": (KO_NO_CHANNEL_DISCLOSURE, KO_ZERO_HIT_DISCLOSURE),
     }

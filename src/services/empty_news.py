@@ -42,8 +42,16 @@ _KO_ZERO_RESULTS = (
     "아래 결론에는 뉴스 근거를 반영하지 않았습니다."
 )
 
+_ZH_HANT_NOT_CONFIGURED = (
+    "⚠️ 未配置搜索渠道，本次分析未納入新聞面證據。\n"
+)
+_ZH_HANT_ZERO_RESULTS = (
+    "⚠️ 本次未獲取到可用的新聞面數據，以下結論未納入新聞維度證據。\n"
+)
+
 _DISCLOSURES = {
     "zh": (_ZH_NOT_CONFIGURED, _ZH_ZERO_RESULTS),
+    "zh_hant": (_ZH_HANT_NOT_CONFIGURED, _ZH_HANT_ZERO_RESULTS),
     "en": (_EN_NOT_CONFIGURED, _EN_ZERO_RESULTS),
     "ko": (_KO_NOT_CONFIGURED, _KO_ZERO_RESULTS),
 }
